@@ -1,9 +1,17 @@
-pub const DnaError = error{};
+pub const DnaError = error{ EmptyDnaStrands, UnequalDnaStrands };
 
 pub fn compute(first: []const u8, second: []const u8) DnaError!usize {
-    _ = first;
-    _ = second;
-    @compileError("please implement the compute function");
+    if (first.len == 0 or second.len == 0) {
+        return DnaError.EmptyDnaStrands;
+    }
+    if (first.len != second.len) {
+        return DnaError.UnequalDnaStrands;
+    }
+    var distance: usize = 0;
+    for (first, second) |a, b| {
+        distance += @intFromBool(a != b);
+    }
+    return distance;
 }
 
 pub fn main() void {}
